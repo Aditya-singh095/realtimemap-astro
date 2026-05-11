@@ -1,0 +1,150 @@
+---
+const navItems = [
+  { icon: 'ti-layout-dashboard', label: 'Dashboard', id: 'nav-dashboard', active: true },
+  { icon: 'ti-radar', label: 'Signals', id: 'nav-signals' },
+  { icon: 'ti-alert-triangle', label: 'Critical', id: 'nav-critical' },
+  { icon: 'ti-folder-open', label: 'Cases', id: 'nav-cases' },
+  { icon: 'ti-chart-line', label: 'Telemetry', id: 'nav-telemetry' },
+];
+---
+<aside
+  id="sidebar"
+  class="sidebar bg-bg3 border-r-2 border-border2 flex flex-col shrink-0 shadow-[5px_0_15px_rgba(0,0,0,0.3)]"
+  style="width: 200px; position: relative; z-index: 25; flex-shrink: 0;"
+>
+  <!-- Node header -->
+  <div class="p-3 border-b border-border bg-bg4 flex items-center gap-2 relative overflow-hidden group" style="cursor: default;">
+    <div class="absolute inset-0 bg-accent/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+    <div class="w-[30px] h-[30px] border border-accent bg-accent-bg flex items-center justify-center text-accent text-[15px] relative z-10">
+      <i class="ti ti-terminal-2"></i>
+    </div>
+    <div class="relative z-10">
+      <div class="font-mono text-[9px] font-bold tracking-[0.1em] text-text">NODE_01</div>
+      <div class="font-mono text-[8px] font-bold text-accent flex items-center gap-[3px] mt-[2px]">
+        <div class="w-1 h-1 bg-accent animate-pulse"></div>
+        ACTIVE_SESSION
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav items -->
+  <div class="flex-1 py-1.5 flex flex-col gap-1" style="overflow-y: auto;">
+    {navItems.map((item) => (
+      <button
+        type="button"
+        id={item.id}
+        data-panel={item.label.toLowerCase()}
+        class={`
+          sidebar-nav-btn w-full flex items-center gap-2.5 px-3 py-2 cursor-pointer border-l-[3px] transition-all duration-100 text-base group
+          ${item.active
+            ? 'bg-accent/20 border-accent text-accent active-nav'
+            : 'border-transparent text-text2 hover:bg-bg5 hover:text-accent hover:border-accent/50'}
+        `}
+        style="position: relative; z-index: 1;"
+      >
+        <i class={`ti ${item.icon}`}></i>
+        <span class={`
+          font-mono text-[9px] font-bold tracking-[0.1em] uppercase
+          ${item.active ? 'text-accent' : 'text-text2 group-hover:text-accent'}
+        `}>
+          {item.label}
+        </span>
+      </button>
+    ))}
+
+    <button
+      type="button"
+      id="btn-new-report"
+      class="m-2.5 p-2 border-2 border-text3 font-mono text-[9px] font-bold tracking-[0.1em] uppercase cursor-pointer bg-transparent text-text transition-all duration-100 hover:bg-accent hover:text-accent-on hover:border-accent"
+      style="position: relative; z-index: 1;"
+    >
+      + New Report
+    </button>
+  </div>
+
+  <!-- Bottom links -->
+  <div class="border-t border-border py-1.5">
+    <button
+      type="button"
+      id="btn-logs"
+      data-panel="logs"
+      class="sidebar-nav-btn w-full flex items-center gap-2.5 px-3 py-2 cursor-pointer border-l-[3px] border-transparent text-text2 hover:bg-bg5 hover:text-accent transition-all duration-100 text-[15px] group"
+    >
+      <i class="ti ti-terminal"></i>
+      <span class="font-mono text-[9px] font-bold tracking-[0.1em] uppercase text-text2 group-hover:text-accent">Logs</span>
+    </button>
+    <button
+      type="button"
+      id="btn-support"
+      data-panel="support"
+      class="sidebar-nav-btn w-full flex items-center gap-2.5 px-3 py-2 cursor-pointer border-l-[3px] border-transparent text-text2 hover:bg-bg5 hover:text-accent transition-all duration-100 text-[15px] group"
+    >
+      <i class="ti ti-help"></i>
+      <span class="font-mono text-[9px] font-bold tracking-[0.1em] uppercase text-text2 group-hover:text-accent">Support</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Side panel overlays (Signals, Critical, Cases, Telemetry, Logs) -->
+<div id="side-panel-overlay" class="side-panel-overlay" style="display:none;">
+  <div id="side-panel" class="side-panel bg-bg3 border-r border-border2 shadow-[8px_0_30px_rgba(0,0,0,0.6)]">
+    <div class="side-panel-header p-3 border-b border-border bg-bg4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i id="sp-icon" class="ti ti-radar text-accent text-[14px]"></i>
+        <span id="sp-title" class="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-text">Panel</span>
+      </div>
+      <button id="sp-close" type="button" class="w-6 h-6 flex items-center justify-center text-text3 hover:text-accent hover:bg-bg5 transition-colors cursor-pointer border border-transparent hover:border-accent">
+        <i class="ti ti-x text-xs"></i>
+      </button>
+    </div>
+    <div id="sp-content" class="flex-1 overflow-y-auto p-3" style="max-height: calc(100vh - 150px);">
+      <!-- Dynamic content injected here -->
+    </div>
+  </div>
+</div>
+
+<!-- New Report Modal -->
+<div id="report-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-content bg-bg3 border-2 border-border2 shadow-[0_0_40px_rgba(0,0,0,0.8)]" style="width:400px; max-width:90vw;">
+    <div class="p-3 border-b border-border bg-bg4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="ti ti-file-plus text-accent text-[14px]"></i>
+        <span class="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-text">New Report</span>
+      </div>
+      <button id="report-close" type="button" class="w-6 h-6 flex items-center justify-center text-text3 hover:text-accent hover:bg-bg5 transition-colors cursor-pointer border border-transparent hover:border-accent">
+        <i class="ti ti-x text-xs"></i>
+      </button>
+    </div>
+    <div class="p-4 flex flex-col gap-3">
+      <div>
+        <label class="font-mono text-[8px] font-bold tracking-[0.1em] uppercase text-text3 block mb-1">Report Type</label>
+        <select class="w-full bg-bg5 border border-border2 text-text font-mono text-[10px] p-2 outline-none focus:border-accent">
+          <option>Anomaly Detection</option>
+          <option>Signal Analysis</option>
+          <option>Route Deviation</option>
+          <option>Seismic Activity</option>
+          <option>Custom Report</option>
+        </select>
+      </div>
+      <div>
+        <label class="font-mono text-[8px] font-bold tracking-[0.1em] uppercase text-text3 block mb-1">Priority</label>
+        <div class="flex gap-2">
+          <button type="button" class="report-priority flex-1 p-1.5 border border-border2 font-mono text-[8px] font-bold uppercase text-text2 hover:border-accent hover:text-accent transition-colors cursor-pointer bg-transparent">Low</button>
+          <button type="button" class="report-priority flex-1 p-1.5 border border-yellow font-mono text-[8px] font-bold uppercase text-yellow bg-transparent cursor-pointer">Medium</button>
+          <button type="button" class="report-priority flex-1 p-1.5 border border-border2 font-mono text-[8px] font-bold uppercase text-text2 hover:border-red hover:text-red transition-colors cursor-pointer bg-transparent">High</button>
+        </div>
+      </div>
+      <div>
+        <label class="font-mono text-[8px] font-bold tracking-[0.1em] uppercase text-text3 block mb-1">Description</label>
+        <textarea rows="3" class="w-full bg-bg5 border border-border2 text-text font-mono text-[10px] p-2 outline-none focus:border-accent resize-none" placeholder="Describe the incident or observation..."></textarea>
+      </div>
+      <button type="button" id="report-submit" class="w-full p-2 bg-accent text-accent-on font-mono text-[9px] font-bold tracking-[0.1em] uppercase cursor-pointer border-none hover:opacity-90 transition-opacity">
+        Submit Report
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/sidebar.ts';
+</script>

@@ -1,0 +1,92 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import TopNav from '../components/TopNav.astro';
+import Sidebar from '../components/Sidebar.astro';
+import MapCanvas from '../components/MapCanvas.astro';
+import MetricsRow from '../components/MetricsRow.astro';
+import AlertFeed from '../components/AlertFeed.astro';
+import StatusBar from '../components/StatusBar.astro';
+---
+
+<DashboardLayout title="REALTIMEMAP | Global Telemetry">
+  <TopNav />
+
+  <main style="flex:1; min-height:0; display:flex; overflow:hidden; position:relative;">
+    <Sidebar />
+
+    <!-- center column -->
+    <div style="flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; position:relative;">
+      <!-- Mobile toolbar -->
+      <div class="mobile-toolbar" style="display:none;">
+        <button id="mobile-sidebar-btn" type="button" class="mobile-menu-btn w-8 h-8 items-center justify-center text-text2 border border-border2 bg-bg3 cursor-pointer hover:bg-accent hover:text-accent-on transition-colors" aria-label="Toggle Sidebar">
+          <i class="ti ti-menu-2 text-sm"></i>
+        </button>
+        <button id="mobile-alerts-btn" type="button" class="mobile-menu-btn w-8 h-8 items-center justify-center text-text2 border border-border2 bg-bg3 cursor-pointer hover:bg-accent hover:text-accent-on transition-colors relative" aria-label="Toggle Alerts">
+          <i class="ti ti-activity text-sm"></i>
+          <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-red rounded-full animate-pulse"></span>
+        </button>
+      </div>
+
+      <!-- map area: takes all remaining height -->
+      <div id="map-wrapper" style="flex:1; min-height:0; position:relative;">
+        <MapCanvas />
+      </div>
+      <MetricsRow />
+    </div>
+
+    <AlertFeed />
+  </main>
+
+  <StatusBar />
+</DashboardLayout>
+
+<style>
+  @media (max-width: 768px) {
+    .mobile-toolbar {
+      display: flex !important;
+      position: fixed;
+      top: 54px;
+      left: 8px;
+      z-index: 35;
+      gap: 4px;
+    }
+  }
+</style>
+
+<script>
+  // Mobile sidebar / alerts toggling
+  function initMobileToggles() {
+    const sidebarBtn = document.getElementById('mobile-sidebar-btn');
+    const alertsBtn = document.getElementById('mobile-alerts-btn');
+    const sidebar = document.getElementById('sidebar');
+    const alertFeed = document.querySelector('.alert-feed-panel');
+
+    if (sidebarBtn && sidebar) {
+      sidebarBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        // Close alerts if open
+        alertFeed?.classList.remove('open');
+      });
+    }
+
+    if (alertsBtn && alertFeed) {
+      alertsBtn.addEventListener('click', () => {
+        alertFeed.classList.toggle('open');
+        // Close sidebar if open
+        sidebar?.classList.remove('open');
+      });
+    }
+
+    // Close mobile panels when clicking the map
+    document.getElementById('map')?.addEventListener('click', () => {
+      sidebar?.classList.remove('open');
+      alertFeed?.classList.remove('open');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileToggles);
+  } else {
+    initMobileToggles();
+  }
+</script>

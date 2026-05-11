@@ -1,0 +1,32 @@
+---
+---
+<div class="alert-feed-panel w-[210px] bg-bg3 border-l-2 border-border2 flex flex-col overflow-hidden shrink-0 z-10 shadow-[-5px_0_15px_rgba(0,0,0,0.3)]">
+  <div class="p-2 px-2.5 border-b border-border flex items-center justify-between bg-bg4">
+    <div class="font-mono text-[9px] font-bold tracking-[0.1em] uppercase text-text flex items-center gap-2">
+      <i class="ti ti-activity text-accent"></i> Alert Feed
+    </div>
+    <div id="alert-count" class="font-mono text-[8px] font-bold px-1.5 py-[1px] bg-red-dim text-red border border-red animate-pulse">
+      --
+    </div>
+  </div>
+  <div id="alert-list" class="flex-1 overflow-y-auto overflow-x-hidden p-0 relative">
+    <!-- Loading skeleton -->
+    <div id="alert-skeleton" class="p-4 space-y-4">
+      {[1, 2, 3, 4, 5].map(() => (
+        <div class="animate-pulse flex flex-col gap-2">
+          <div class="flex justify-between">
+            <div class="h-2 bg-bg5 w-16"></div>
+            <div class="h-2 bg-bg5 w-8"></div>
+          </div>
+          <div class="h-2 bg-bg5 w-full"></div>
+          <div class="h-2 bg-bg5 w-3/4"></div>
+        </div>
+      ))}
+    </div>
+    <!-- Alerts injected here by TS -->
+  </div>
+</div>
+
+<script>
+  import '../scripts/feeds/earthquakes.ts';
+</script>

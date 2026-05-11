@@ -1,0 +1,271 @@
+---
+import ThemePanel from './ThemePanel.astro';
+---
+<div class="topnav h-12 bg-bg border-b-2 border-border2 flex items-center justify-between px-4 shrink-0 relative" style="z-index: 30;">
+  <div class="flex items-center gap-5">
+    <div class="font-display font-black text-[15px] tracking-[0.04em] text-text text-glow topnav-brand">
+      REALTIMEMAP
+    </div>
+    <!-- Search Box -->
+    <div class="topnav-search flex items-center gap-1.5 bg-bg3 border border-border2 px-2 py-1 focus-within:border-accent transition-colors" style="position: relative; z-index: 31;">
+      <i class="ti ti-search text-xs text-text3" aria-hidden="true"></i>
+      <input 
+        id="global-search"
+        placeholder="SEARCH LOCATION..." 
+        type="text" 
+        autocomplete="off"
+        class="bg-transparent border-none outline-none font-mono text-[9px] font-bold tracking-widest text-text uppercase w-40 placeholder:text-text3"
+      />
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <div id="sys-clock" class="font-mono text-[10px] font-bold text-accent uppercase tracking-widest topnav-clock">
+      00:00:00 UTC
+    </div>
+
+    <!-- Icon buttons -->
+    <div class="flex items-center gap-[2px]" style="position: relative; z-index: 31;">
+      <!-- Theme trigger -->
+      <button
+        id="theme-trigger"
+        type="button"
+        class="w-8 h-8 flex items-center justify-center cursor-pointer text-base text-text2 border border-transparent transition-all duration-100 hover:bg-accent hover:text-accent-on hover:border-accent"
+        aria-label="Theme Settings"
+        style="position: relative; z-index: 32;"
+      >
+        <i class="ti ti-palette"></i>
+      </button>
+
+      <!-- Notifications -->
+      <div style="position: relative;">
+        <button
+          id="notif-trigger"
+          type="button"
+          class="w-8 h-8 flex items-center justify-center cursor-pointer text-base text-text2 border border-transparent transition-all duration-100 hover:bg-accent hover:text-accent-on hover:border-accent relative"
+          aria-label="Notifications"
+          style="position: relative; z-index: 32;"
+        >
+          <i class="ti ti-bell"></i>
+          <span id="notif-badge" class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red rounded-full animate-pulse"></span>
+        </button>
+        
+        <!-- Notification Dropdown -->
+        <div id="notif-panel" style="display:none; position:absolute; top:calc(100% + 4px); right:0; z-index:9999; min-width:260px; max-width:320px; background:var(--bg); border:2px solid var(--border2); box-shadow:0 8px 30px rgba(0,0,0,0.7);">
+          <div class="p-2 px-3 border-b border-border bg-bg4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="ti ti-bell text-accent text-xs"></i>
+              <span class="font-mono text-[9px] font-bold tracking-[0.1em] uppercase text-text">Notifications</span>
+            </div>
+            <span id="notif-count" class="font-mono text-[8px] font-bold px-1.5 py-[1px] bg-accent-bg text-accent border border-accent">0</span>
+          </div>
+          <div id="notif-list" class="max-h-[300px] overflow-y-auto">
+            <!-- Populated by JS -->
+          </div>
+          <div class="p-2 border-t border-border text-center">
+            <button type="button" id="notif-clear" class="font-mono text-[8px] font-bold text-text3 hover:text-accent cursor-pointer bg-transparent border-none uppercase tracking-wider transition-colors">Mark all as read</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account -->
+      <div style="position: relative;">
+        <button
+          id="user-trigger"
+          type="button"
+          class="w-8 h-8 flex items-center justify-center cursor-pointer text-base text-text2 border border-transparent transition-all duration-100 hover:bg-accent hover:text-accent-on hover:border-accent"
+          aria-label="Account"
+          style="position: relative; z-index: 32;"
+        >
+          <i class="ti ti-user"></i>
+        </button>
+
+        <!-- User Dropdown -->
+        <div id="user-panel" style="display:none; position:absolute; top:calc(100% + 4px); right:0; z-index:9999; min-width:200px; background:var(--bg); border:2px solid var(--border2); box-shadow:0 8px 30px rgba(0,0,0,0.7);">
+          <div class="p-3 border-b border-border bg-bg4">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 border border-accent bg-accent-bg flex items-center justify-center text-accent font-bold text-sm">OP</div>
+              <div>
+                <div class="font-mono text-[9px] font-bold text-text">OPERATOR_01</div>
+                <div class="font-mono text-[7px] text-accent">ADMIN ACCESS</div>
+              </div>
+            </div>
+          </div>
+          <div class="py-1">
+            <button type="button" class="user-menu-btn w-full px-3 py-2 flex items-center gap-2 text-text2 hover:bg-bg5 hover:text-accent transition-colors cursor-pointer bg-transparent border-none text-left">
+              <i class="ti ti-settings text-sm"></i>
+              <span class="font-mono text-[9px] font-bold uppercase tracking-wider">Settings</span>
+            </button>
+            <button type="button" class="user-menu-btn w-full px-3 py-2 flex items-center gap-2 text-text2 hover:bg-bg5 hover:text-accent transition-colors cursor-pointer bg-transparent border-none text-left">
+              <i class="ti ti-key text-sm"></i>
+              <span class="font-mono text-[9px] font-bold uppercase tracking-wider">API Keys</span>
+            </button>
+            <button type="button" class="user-menu-btn w-full px-3 py-2 flex items-center gap-2 text-text2 hover:bg-bg5 hover:text-accent transition-colors cursor-pointer bg-transparent border-none text-left">
+              <i class="ti ti-download text-sm"></i>
+              <span class="font-mono text-[9px] font-bold uppercase tracking-wider">Export Data</span>
+            </button>
+            <div class="border-t border-border my-1"></div>
+            <button type="button" class="user-menu-btn w-full px-3 py-2 flex items-center gap-2 text-red hover:bg-bg5 transition-colors cursor-pointer bg-transparent border-none text-left">
+              <i class="ti ti-logout text-sm"></i>
+              <span class="font-mono text-[9px] font-bold uppercase tracking-wider">Disconnect</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme Panel dropdown (positioned relative to this nav bar) -->
+  <ThemePanel />
+</div>
+
+<script>
+  // Notification panel logic
+  function initNotifications() {
+    const trigger = document.getElementById('notif-trigger');
+    const panel = document.getElementById('notif-panel');
+    const notifList = document.getElementById('notif-list');
+    const notifCount = document.getElementById('notif-count');
+    const notifBadge = document.getElementById('notif-badge');
+    const clearBtn = document.getElementById('notif-clear');
+
+    let notifications: any[] = [];
+
+    function addSystemNotifications() {
+      notifications = [
+        { type: 'info', icon: 'ti-activity', msg: 'Earthquake feed connected — USGS data live', time: Date.now() - 60000 },
+        { type: 'warn', icon: 'ti-alert-triangle', msg: 'OpenSky API rate limited — using simulated flights', time: Date.now() - 120000 },
+        { type: 'info', icon: 'ti-ship', msg: 'Maritime simulation active — 450+ vessels tracked', time: Date.now() - 180000 },
+        { type: 'info', icon: 'ti-satellite', msg: 'ISS position tracking enabled (5s refresh)', time: Date.now() - 240000 },
+        { type: 'info', icon: 'ti-topology-ring', msg: '26 submarine cable routes rendered', time: Date.now() - 300000 },
+      ];
+      renderNotifications();
+    }
+
+    // Listen for earthquake alerts and add critical ones
+    window.addEventListener('alerts-updated', (e: any) => {
+      const alerts = e.detail.alerts || [];
+      const critical = alerts.filter((a: any) => a.properties.mag >= 5.0);
+      critical.forEach((a: any) => {
+        const exists = notifications.some(n => n.msg.includes(a.properties.place));
+        if (!exists) {
+          notifications.unshift({
+            type: 'critical',
+            icon: 'ti-alert-triangle',
+            msg: `MAG ${a.properties.mag.toFixed(1)} — ${a.properties.place}`,
+            time: a.properties.time
+          });
+        }
+      });
+      renderNotifications();
+    });
+
+    function renderNotifications() {
+      if (!notifList || !notifCount) return;
+      notifCount.textContent = String(notifications.length);
+      if (notifBadge) notifBadge.style.display = notifications.length > 0 ? 'block' : 'none';
+
+      notifList.innerHTML = notifications.length === 0
+        ? '<div class="p-4 text-center font-mono text-[9px] text-text3">No notifications</div>'
+        : notifications.map(n => {
+          const colors: Record<string, string> = { info: 'var(--accent)', warn: 'var(--yellow)', critical: 'var(--red)' };
+          const color = colors[n.type] || 'var(--accent)';
+          const ago = getTimeAgo(n.time);
+          return `
+            <div class="p-2 px-3 border-b border-border hover:bg-bg4 transition-colors cursor-pointer">
+              <div class="flex items-start gap-2">
+                <i class="ti ${n.icon} text-xs mt-0.5" style="color:${color}"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="font-mono text-[9px] text-text leading-tight">${n.msg}</div>
+                  <div class="font-mono text-[7px] text-text3 mt-0.5">${ago}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+    }
+
+    function getTimeAgo(ts: number): string {
+      const diff = Date.now() - ts;
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      return `${Math.floor(hrs / 24)}d ago`;
+    }
+
+    if (trigger && panel) {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = panel.style.display !== 'none';
+        panel.style.display = isOpen ? 'none' : 'block';
+        // Close user panel if open
+        const up = document.getElementById('user-panel');
+        if (up) up.style.display = 'none';
+      });
+    }
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        notifications = [];
+        renderNotifications();
+      });
+    }
+
+    addSystemNotifications();
+  }
+
+  // User panel logic
+  function initUserPanel() {
+    const trigger = document.getElementById('user-trigger');
+    const panel = document.getElementById('user-panel');
+
+    if (trigger && panel) {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = panel.style.display !== 'none';
+        panel.style.display = isOpen ? 'none' : 'block';
+        // Close notif panel if open
+        const np = document.getElementById('notif-panel');
+        if (np) np.style.display = 'none';
+      });
+    }
+
+    // User menu actions
+    document.querySelectorAll<HTMLElement>('.user-menu-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = btn.querySelector('span')?.textContent?.trim() || '';
+        if (panel) panel.style.display = 'none';
+        if (label === 'DISCONNECT') {
+          (window as any).__showToast?.('Session disconnected');
+        } else if (label === 'EXPORT DATA') {
+          (window as any).__showToast?.('Data export started — check downloads');
+        } else {
+          (window as any).__showToast?.(`${label} panel coming soon`);
+        }
+      });
+    });
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', (e) => {
+    const notifPanel = document.getElementById('notif-panel');
+    const userPanel = document.getElementById('user-panel');
+    const notifTrigger = document.getElementById('notif-trigger');
+    const userTrigger = document.getElementById('user-trigger');
+
+    if (notifPanel && notifPanel.style.display !== 'none') {
+      if (!notifPanel.contains(e.target as Node) && e.target !== notifTrigger && !notifTrigger?.contains(e.target as Node)) {
+        notifPanel.style.display = 'none';
+      }
+    }
+    if (userPanel && userPanel.style.display !== 'none') {
+      if (!userPanel.contains(e.target as Node) && e.target !== userTrigger && !userTrigger?.contains(e.target as Node)) {
+        userPanel.style.display = 'none';
+      }
+    }
+  });
+
+  initNotifications();
+  initUserPanel();
+</script>

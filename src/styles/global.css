@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --accent: #2ae500;
+    --accent-dim: #1a8c00;
+    --accent-bg: #0d2200;
+    --accent-on: #000000;
+    
+    --bg: #0e0d0d;
+    --bg2: #141313;
+    --bg3: #1c1b1b;
+    --bg4: #252424;
+    --bg5: #2e2d2d;
+    
+    --border: #2a2929;
+    --border2: #383636;
+    
+    --text: #ffffff;
+    --text2: #d4d4d4;
+    --text3: #a3a3a3;
+    
+    --red: #ff4444;
+    --red-dim: #93000a;
+    --yellow: #f5c400;
+  }
+
+  html.light-mode {
+    --bg: #f5f4f2;
+    --bg2: #eeece9;
+    --bg3: #e5e3df;
+    --bg4: #dddbd7;
+    --bg5: #d4d2ce;
+    
+    --border: #c8c6c2;
+    --border2: #b8b6b2;
+    
+    --text: #1a1918;
+    --text2: #4a4846;
+    --text3: #8a8886;
+  }
+
+  body {
+    @apply font-body bg-bg2 text-text overflow-hidden;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-bg3;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border2 rounded-sm;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent;
+  }
+}
+
+@layer components {
+  .cyber-panel {
+    @apply bg-bg3 border border-border2 shadow-[0_0_15px_rgba(0,0,0,0.5)];
+  }
+  .cyber-button {
+    @apply border border-accent text-accent hover:bg-accent hover:text-accent-on transition-colors duration-200 uppercase font-mono text-xs px-4 py-2 flex items-center justify-center gap-2;
+  }
+  .glass-panel {
+    @apply backdrop-blur-md border border-border2;
+    background-color: color-mix(in srgb, var(--bg) 80%, transparent);
+  }
+}
+
+/* Utilities for glowing text/borders */
+.text-glow {
+  text-shadow: 0 0 10px var(--accent-dim);
+}
+.border-glow {
+  box-shadow: 0 0 10px var(--accent-dim), inset 0 0 5px var(--accent-dim);
+}
+
+/* Leaflet Map overrides for dark theme */
+.leaflet-container {
+  @apply bg-bg2 font-mono;
+}
+.leaflet-tile-pane {
+  filter: saturate(0.5) contrast(1.2);
+}
+html.light-mode .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(1.1);
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  @apply bg-bg3 text-text border border-border2 shadow-[0_0_10px_rgba(0,0,0,0.8)] rounded-none;
+}
+.leaflet-popup-content {
+  @apply font-mono text-xs m-3;
+}
+.rtm-popup .leaflet-popup-content {
+  @apply m-0;
+}
+.leaflet-control-zoom a {
+  @apply bg-bg3 text-text border-border2 !important;
+}
+.leaflet-control-zoom a:hover {
+  @apply bg-accent text-accent-on !important;
+}
+
+/* Satellite icon blink */
+@keyframes satBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Camera marker pulse */
+@keyframes camPulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(255, 58, 122, 0.3); }
+  50%      { box-shadow: 0 0 12px rgba(255, 58, 122, 0.7); }
+}
+
+/* Custom div icon base reset */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Ensure Leaflet popups are above all our overlays */
+.leaflet-popup {
+  z-index: 1000 !important;
+}
+.leaflet-pane.leaflet-popup-pane {
+  z-index: 1000 !important;
+}
+
+/* ─── Side Panel Overlay ────────────────────────────────────────────────────── */
+.side-panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+}
+
+.side-panel {
+  width: 300px;
+  max-width: 85vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: slideInPanel 0.2s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideInPanel {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ─── Modal Overlay ─────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modal-content {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Toast Notifications ───────────────────────────────────────────────────── */
+.toast-notification {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 10000;
+  background: var(--bg3);
+  border: 1px solid var(--accent);
+  padding: 8px 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 10px var(--accent-dim);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Mobile hamburger ──────────────────────────────────────────────────────── */
+.mobile-menu-btn {
+  display: none;
+}
+
+/* ─── Mobile Responsiveness ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Metrics row: 3 cols on tablet */
+  .metrics-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+    height: auto !important;
+  }
+  .metrics-row .metric-cell:nth-child(n+4) {
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Hide sidebar on mobile */
+  .sidebar {
+    position: fixed !important;
+    left: -100%;
+    top: 48px;
+    bottom: 0;
+    z-index: 40 !important;
+    transition: left 0.3s ease;
+    width: 200px !important;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Show hamburger menu */
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+
+  /* Alert feed becomes collapsible on mobile */
+  .alert-feed-panel {
+    position: fixed !important;
+    right: -100%;
+    top: 48px;
+    bottom: 0;
+    z-index: 40 !important;
+    transition: right 0.3s ease;
+    width: 260px !important;
+  }
+  .alert-feed-panel.open {
+    right: 0;
+  }
+
+  /* Hide search on very small screens, show icon only */
+  .topnav-search {
+    width: 32px;
+    overflow: hidden;
+    transition: width 0.3s;
+  }
+  .topnav-search:focus-within {
+    width: 160px;
+  }
+  .topnav-search input {
+    width: 100% !important;
+  }
+
+  /* Clock: shorter format */
+  .topnav-clock {
+    font-size: 8px !important;
+  }
+
+  /* Metrics row: 2 cols */
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    height: auto !important;
+  }
+  .metrics-row .metric-cell {
+    border-bottom: 1px solid var(--border);
+  }
+  .metric-val {
+    font-size: 22px !important;
+  }
+
+  /* Status bar: hide some items */
+  .status-bar {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller: simplify further */
+  .topnav {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    gap: 4px;
+  }
+  .topnav-brand {
+    font-size: 11px !important;
+  }
+  .topnav-search {
+    display: none !important;
+  }
+  .metrics-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .metric-val {
+    font-size: 18px !important;
+  }
+}
+

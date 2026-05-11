@@ -1,0 +1,43 @@
+---
+const metrics = [
+  { id: 'm1', lbl1: 'EQ Events', lbl2: '(24h)', icon: 'ti-activity', valId: 'val-eq', valBase: '00', badgeClass: 'text-accent', badgeId: 'bdg-eq', badgeText: 'SYNCING', subId: 'sub-eq', subText: 'USGS V1.0' },
+  { id: 'm2', lbl1: 'Active', lbl2: 'Flights', icon: 'ti-plane', valId: 'val-flights', valBase: '--', badgeClass: 'text-accent', badgeId: 'bdg-flights', badgeText: 'TRACKING', subId: 'sub-flights', subText: 'OPENSKY' },
+  { id: 'm3', lbl1: 'Maritime', lbl2: 'Vessels', icon: 'ti-ship', valId: 'val-ships', valBase: '--', badgeClass: 'text-yellow', badgeId: 'bdg-ships', badgeText: 'AIS FEED', subId: 'sub-ships', subText: 'GLOBAL' },
+  { id: 'm4', lbl1: 'Active', lbl2: 'Satellites', icon: 'ti-satellite', valId: 'val-sats', valBase: '--', badgeClass: 'text-accent', badgeId: 'bdg-sats', badgeText: 'ORBIT', subId: 'sub-sats', subText: 'LEO+GEO' },
+  { id: 'm5', lbl1: 'Data', lbl2: 'Sources', icon: 'ti-database', valId: 'val-src', valBase: '05', badgeClass: 'text-accent', badgeId: 'bdg-src', badgeText: 'ONLINE', subId: 'sub-src', subText: 'HEALTH: 98.4%' },
+];
+---
+<div class="metrics-row h-[130px] grid grid-cols-5 border-t-2 border-border2 shrink-0 z-10 bg-bg2 relative">
+  <div class="absolute inset-0 bg-gradient-to-t from-bg2 via-transparent to-transparent pointer-events-none z-0"></div>
+  {metrics.map((m, i) => (
+    <div class={`
+      relative z-10 p-2.5 px-3 flex flex-col justify-between cursor-pointer transition-colors duration-100 hover:bg-bg3 group metric-cell
+      ${i < metrics.length - 1 ? 'border-r border-border' : ''}
+    `}>
+      <div class="flex justify-between items-start">
+        <div class="font-mono text-[8px] font-bold tracking-[0.08em] uppercase text-text2 leading-[1.4] group-hover:text-text transition-colors">
+          {m.lbl1}<br/>{m.lbl2}
+        </div>
+        <i class={`ti ${m.icon} text-[15px] text-text3 group-hover:text-accent transition-colors`}></i>
+      </div>
+      <div class="flex items-baseline gap-1.5 mt-1">
+        <div id={m.valId} class="font-display font-black text-[30px] leading-none tracking-tight text-text metric-val">
+          {m.valBase}
+        </div>
+        <div id={m.badgeId} class={`font-mono text-[8px] font-bold tracking-[0.06em] uppercase ${m.badgeClass}`}>
+          {m.badgeText}
+        </div>
+      </div>
+      <div class="mt-2">
+        <svg id={`sp-${m.id}`} class="w-full h-4 sparkline" preserveAspectRatio="none" viewBox="0 0 100 16"></svg>
+        <div class="font-mono text-[8px] font-bold tracking-[0.06em] uppercase text-text3 mt-1" id={m.subId}>
+          {m.subText}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  import '../scripts/metrics.ts';
+</script>

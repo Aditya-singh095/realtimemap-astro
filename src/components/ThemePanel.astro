@@ -1,0 +1,70 @@
+---
+const accents = [
+  { name: 'Green', color: '#2ae500', id: 'green' },
+  { name: 'Blue', color: '#3b9eff', id: 'blue' },
+  { name: 'Orange', color: '#ff7a2a', id: 'orange' },
+  { name: 'Yellow', color: '#f5d800', id: 'yellow' },
+  { name: 'Red', color: '#ff3a3a', id: 'red' },
+  { name: 'Purple', color: '#b06aff', id: 'purple' },
+  { name: 'Cyan', color: '#00d4d4', id: 'cyan' }
+];
+---
+<!-- Theme Panel Dropdown — anchored to TopNav, sits above everything -->
+<div
+  id="theme-panel"
+  class="hidden"
+  style="
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 4px;
+    z-index: 9999;
+    background: var(--bg);
+    border: 2px solid var(--border2);
+    padding: 10px 12px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    min-width: 180px;
+    pointer-events: auto;
+  "
+>
+  <div class="font-mono text-[8px] font-bold tracking-[0.12em] uppercase text-text2">Accent Color</div>
+  <div class="flex gap-1.5 flex-wrap" style="max-width: 160px;">
+    {accents.map((a, i) => (
+      <button
+        data-accent={a.id}
+        type="button"
+        class={`theme-btn w-5 h-5 cursor-pointer border-2 transition-all hover:scale-125 ${i === 0 ? 'border-text scale-110' : 'border-transparent'}`}
+        style={`background: ${a.color};`}
+        title={a.name}
+        aria-label={`Set ${a.name} accent`}
+      ></button>
+    ))}
+  </div>
+
+  <div class="h-px bg-border my-1"></div>
+
+  <div class="font-mono text-[8px] font-bold tracking-[0.12em] uppercase text-text2">Display Mode</div>
+  <button
+    id="mode-toggle"
+    type="button"
+    class="flex items-center gap-2 cursor-pointer py-1 group"
+    style="background: none; border: none; outline: none;"
+  >
+    <div id="mode-track" class="relative transition-colors duration-200" style="width: 28px; height: 14px; background: var(--bg5); border: 1px solid var(--border2);">
+      <div id="mode-thumb" class="absolute top-[1px] left-[1px] transition-all duration-200" style="width: 10px; height: 10px; background: var(--text);"></div>
+    </div>
+    <div id="mode-lbl" class="font-mono text-[8px] font-bold tracking-[0.1em] uppercase text-text2 group-hover:text-text transition-colors">Dark Mode</div>
+  </button>
+</div>
+
+<style>
+  /* Override the hidden class — we use display:none via inline style instead */
+  #theme-panel.hidden {
+    display: none !important;
+  }
+  #theme-panel:not(.hidden) {
+    display: flex !important;
+  }
+</style>

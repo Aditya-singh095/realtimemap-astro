@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+interface Props { title: string; }
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="REALTIMEMAP — Global Telemetry Dashboard" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body style="height:100vh; width:100vw; display:flex; flex-direction:column; overflow:hidden; margin:0; padding:0; background:var(--bg2); color:var(--text); user-select:none;">
+
+  <!-- CRT scan-line: purely decorative, NEVER intercepts clicks -->
+  <div aria-hidden="true" style="pointer-events:none; position:fixed; inset:0; z-index:9990; overflow:hidden; opacity:0.07;">
+    <div style="height:8vh; width:100%; background:linear-gradient(to bottom, transparent, var(--accent), transparent); animation:scanLine 7s linear infinite;"></div>
+  </div>
+
+  <slot />
+
+  <script>
+    import '../scripts/theme.ts';
+    import '../scripts/clock.ts';
+    import '../scripts/metrics.ts';
+  </script>
+</body>
+</html>
+
+<style is:global>
+  @keyframes scanLine {
+    0%   { transform:translateY(-10vh); }
+    100% { transform:translateY(110vh); }
+  }
+  /* Leaflet popup above everything */
+  .leaflet-popup-pane { z-index: 900 !important; }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: var(--bg3) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border2) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8) !important;
+  }
+  .leaflet-popup-content {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 10px !important;
+    margin: 10px 12px !important;
+  }
+  .leaflet-control-zoom a {
+    background: var(--bg3) !important;
+    color: var(--text) !important;
+    border-color: var(--border2) !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: var(--accent) !important;
+    color: var(--accent-on) !important;
+  }
+  /* div icon reset */
+  .custom-div-icon { background:transparent !important; border:none !important; }
+</style>
