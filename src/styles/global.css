@@ -3,9 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.cyberpunk-tiles img {
-  filter: invert(1) hue-rotate(180deg) brightness(180%) contrast(150%) saturate(250%) sepia(30%);
-}
 
 
 
@@ -107,16 +104,6 @@ html.light-mode .text-glow {
   filter: saturate(0.5) contrast(1.2);
 }
 
-html.light-mode .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(180deg) brightness(1.1);
-}
-
-/* Satellite, terrain tiles - no changes in light mode */
-html.light-mode .cyberpunk-tiles,
-html.light-mode .satellite-tiles,
-html.light-mode .terrain-tiles {
-  filter: saturate(0.5) contrast(1.2) !important;
-}
 
 /* Bold outlines for all tile types in both modes */
 .satellite-tiles img,

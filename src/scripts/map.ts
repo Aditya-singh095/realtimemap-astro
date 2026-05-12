@@ -11,8 +11,8 @@ let L: any;
 
 const TILES: Record<string, { url: string; opts: object }> = {
   dark: {
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    opts: { subdomains: 'abcd', maxZoom: 19 }
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    opts: { maxZoom: 16, attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ' }
   },
   satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -21,10 +21,6 @@ const TILES: Record<string, { url: string; opts: object }> = {
   terrain: {
     url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     opts: { maxZoom: 17, className: 'terrain-tiles' }
-  },
-  cyberpunk: {
-    url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-    opts: { subdomains: 'abcd', maxZoom: 19, className: 'cyberpunk-tiles' }
   },
   osm: {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -193,7 +189,7 @@ function initLayerPanel() {
   });
 
   // Tile buttons
-  ['dark', 'satellite', 'terrain', 'cyberpunk', 'osm'].forEach(id => {
+  ['dark', 'satellite', 'terrain', 'osm'].forEach(id => {
     document.getElementById(`tile-${id}`)?.addEventListener('click', (e) => {
       e.stopPropagation();
       setTile(id);
