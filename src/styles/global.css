@@ -87,7 +87,7 @@
 }
 
 html.light-mode .text-glow {
-  text-shadow: none;
+  text-shadow: none !important;
 }
 /* Utilities for glowing text/borders */
 .text-glow {
