@@ -25,6 +25,10 @@ const TILES: Record<string, { url: string; opts: object }> = {
   cyberpunk: {
     url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
     opts: { subdomains: 'abcd', maxZoom: 19, className: 'cyberpunk-tiles' }
+  },
+  osm: {
+    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    opts: { maxZoom: 19, attribution: '&copy; OpenStreetMap' }
   }
 };
 
@@ -189,7 +193,7 @@ function initLayerPanel() {
   });
 
   // Tile buttons
-  ['dark', 'satellite', 'terrain', 'cyberpunk'].forEach(id => {
+  ['dark', 'satellite', 'terrain', 'cyberpunk', 'osm'].forEach(id => {
     document.getElementById(`tile-${id}`)?.addEventListener('click', (e) => {
       e.stopPropagation();
       setTile(id);
