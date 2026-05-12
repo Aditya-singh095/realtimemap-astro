@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.cyberpunk-tiles img {
+  filter: invert(1) hue-rotate(180deg) brightness(180%) contrast(150%) saturate(250%) sepia(30%);
+}
+
+
+
 @layer base {
   :root {
     --accent: #2ae500;
@@ -38,13 +44,17 @@
     --border: #c8c6c2;
     --border2: #b8b6b2;
     
-    --text: #1a1918;
-    --text2: #4a4846;
-    --text3: #8a8886;
+    --text: #000000;
+    --text2: #0a0a08;
+    --text3: #2a2724;
   }
 
   body {
     @apply font-body bg-bg2 text-text overflow-hidden;
+  }
+
+  html.light-mode body {
+    @apply font-bold;
   }
 
   /* Custom Scrollbar */
@@ -76,6 +86,9 @@
   }
 }
 
+html.light-mode .text-glow {
+  text-shadow: none;
+}
 /* Utilities for glowing text/borders */
 .text-glow {
   text-shadow: 0 0 10px var(--accent-dim);
@@ -88,11 +101,27 @@
 .leaflet-container {
   @apply bg-bg2 font-mono;
 }
+
+
 .leaflet-tile-pane {
   filter: saturate(0.5) contrast(1.2);
 }
+
 html.light-mode .leaflet-tile-pane {
   filter: invert(1) hue-rotate(180deg) brightness(1.1);
+}
+
+/* Satellite, terrain tiles - no changes in light mode */
+html.light-mode .cyberpunk-tiles,
+html.light-mode .satellite-tiles,
+html.light-mode .terrain-tiles {
+  filter: saturate(0.5) contrast(1.2) !important;
+}
+
+/* Bold outlines for all tile types in both modes */
+.satellite-tiles img,
+.terrain-tiles img {
+  outline: 1px solid rgba(255,255,255,0.1);
 }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
   @apply bg-bg3 text-text border border-border2 shadow-[0_0_10px_rgba(0,0,0,0.8)] rounded-none;
