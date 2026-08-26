@@ -33,6 +33,7 @@ const TILES: Record<string, { url: string; opts: object }> = {
 let currentTileLayer: any = null;
 let currentTileId = 'dark';
 let is3DMode = false;
+let restoringShareState = false;
 
 const layerRegistry: Record<string, any> = {};
 const layerVisible: Record<string, boolean> = {
@@ -64,6 +65,7 @@ function setTile(id: string) {
       btn.classList.toggle('active-tile', active);
     }
   });
+  updateShareHash();
 }
 
 // ─── Layer toggling ───────────────────────────────────────────────────────────
@@ -78,6 +80,58 @@ function toggleLayer(id: string) {
   }
   const pill = document.querySelector<HTMLElement>(`.lpill[data-layer="${id}"]`);
   if (pill) pill.classList.toggle('active', layerVisible[id]);
+  updateShareHash();
+}
+
+function updateShareHash() {
+  if (!map || restoringShareState) return;
+  const center = map.getCenter();
+  const params = new URLSearchParams();
+  params.set('view', [center.lat.toFixed(5), center.lng.toFixed(5), map.getZoom()].join(','));
+  params.set('tile', currentTileId);
+  params.set('layers', Object.entries(layerVisible).filter(([, visible]) => visible).map(([id]) => id).join(','));
+  history.replaceState(null, '', `${location.pathname}${location.search}#${params.toString()}`);
+}
+
+function readShareState() {
+  const params = new URLSearchParams(location.hash.slice(1));
+  const view = params.get('view')?.split(',').map(Number) || [];
+  const tile = params.get('tile');
+  const layers = params.get('layers');
+  return {
+    view: view.length === 3 && view.every(Number.isFinite) ? view as [number, number, number] : null,
+    tile: tile && Object.hasOwn(TILES, tile) ? tile : null,
+    layers: layers === null ? null : new Set(layers.split(',').filter(id => Object.hasOwn(layerVisible, id))),
+  };
+}
+
+function restoreShareState() {
+  const state = readShareState();
+  restoringShareState = true;
+  if (state.view) {
+    const [lat, lng, zoom] = state.view;
+    map.setView([Math.max(-90, Math.min(90, lat)), lng, Math.max(2, Math.min(19, zoom))], { animate: false });
+  }
+  if (state.tile && state.tile !== currentTileId) setTile(state.tile);
+  if (state.layers) {
+    Object.keys(layerVisible).forEach(id => { layerVisible[id] = state.layers!.has(id); });
+  }
+  restoringShareState = false;
+}
+
+function initShareLinks() {
+  const button = document.getElementById('share-map-btn');
+  button?.addEventListener('click', async () => {
+    updateShareHash();
+    const url = location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      button.setAttribute('aria-label', 'Map link copied');
+      setTimeout(() => button.setAttribute('aria-label', 'Copy map link'), 1400);
+    } catch {
+      window.prompt('Copy map link', url);
+    }
+  });
 }
 
 // ─── 2D/3D Toggle ─────────────────────────────────────────────────────────────
@@ -226,6 +280,8 @@ async function initMap() {
 
   currentTileLayer = L.tileLayer(TILES.dark.url, TILES.dark.opts).addTo(map);
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
+  restoreShareState();
+  map.on('moveend zoomend', updateShareHash);
 
   // Force Leaflet to recalculate its container size
   setTimeout(() => map.invalidateSize(), 200);
@@ -276,6 +332,8 @@ async function initMap() {
 
   initLayerPanel();
   initStreetView();
+  initShareLinks();
+  updateShareHash();
 }
 
 if (document.readyState === 'loading') {

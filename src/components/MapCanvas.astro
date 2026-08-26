@@ -179,6 +179,22 @@
       <i class="ti ti-walk" style="font-size:11px;"></i>
       STREET VIEW
     </button>
+
+    <button id="share-map-btn" type="button" class="map-ctrl-btn" aria-label="Copy map link" style="
+      display:flex; align-items:center; gap:5px;
+      padding:5px 10px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border:1px solid var(--border2);
+      color:var(--text2);
+      font-family:monospace; font-size:8px; font-weight:700;
+      letter-spacing:0.1em; text-transform:uppercase;
+      cursor:pointer; backdrop-filter:blur(8px);
+      transition: border-color 0.15s, color 0.15s;
+    " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+       onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+      <i class="ti ti-share-2" style="font-size:11px;"></i>
+      SHARE VIEW
+    </button>
   </div>
 
   <!-- ③ STREET VIEW OVERLAY — fullscreen immersive panel -->
