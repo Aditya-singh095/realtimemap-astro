@@ -87,7 +87,9 @@ export async function initSatellites(map: any, L: any) {
     }
   }
 
-  // ─── Simulated LEO Constellations ────────────────────────────────────────
+  // Constellation-wide positions require a live TLE source. Until that source
+  // is available, show only the verified ISS position below.
+  if (false) {
   const leoSats: any[] = [];
   
   // Starlink (Communication)
@@ -166,19 +168,10 @@ export async function initSatellites(map: any, L: any) {
       .addTo(satelliteGroup);
   });
 
-  // Update global count
-  globalState.satsCount = leoSats.length + geoSats.length + 1; // +1 for ISS
+  }
 
-  // Animate non-GEO satellites
-  setInterval(() => {
-    t += 1;
-    leoMarkers.forEach(({ marker, sat }) => {
-      const newLng = ((sat.lng + t * sat.speed) % 360 + 360) % 360;
-      const adjustedLng = newLng > 180 ? newLng - 360 : newLng;
-      // create a slight wavy motion based on inclination
-      marker.setLatLng([sat.lat + Math.sin(t * 0.05 * sat.speed) * (sat.inc > 60 ? 5 : 2), adjustedLng]);
-    });
-  }, 2000);
+  // Only the live ISS marker contributes to the count.
+  globalState.satsCount = 1;
 
   // Start ISS tracking
   await fetchISS();

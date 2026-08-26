@@ -47,15 +47,15 @@ function updateMetrics() {
   
   // Active flights count
   const flightsEl = document.getElementById('val-flights');
-  if (flightsEl) flightsEl.textContent = String(globalState.flightsCount || 56);
+  if (flightsEl) flightsEl.textContent = String(globalState.flightsCount);
   
   // Ships count
   const shipsEl = document.getElementById('val-ships');
-  if (shipsEl) shipsEl.textContent = String(globalState.shipsCount || 450);
+  if (shipsEl) shipsEl.textContent = String(globalState.shipsCount);
   
   // Satellites count
   const satsEl = document.getElementById('val-sats');
-  if (satsEl) satsEl.textContent = String(globalState.satsCount || 152);
+  if (satsEl) satsEl.textContent = String(globalState.satsCount);
   
   // Data sources
   const srcEl = document.getElementById('val-src');

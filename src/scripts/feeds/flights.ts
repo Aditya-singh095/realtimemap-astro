@@ -277,9 +277,8 @@ async function fetchLive(L: any) {
 
 export async function initFlights(map: any, L: any) {
   layerGroup = L.layerGroup();
-  buildFlightMarkers(L);
-  globalState.flightsCount = ALL_FLIGHTS.length;
-  // Refresh simulated positions every 90s
-  setInterval(() => buildFlightMarkers(L), 90_000);
+  globalState.flightsCount = 0;
+  await fetchLive(L).catch(() => {});
+  setInterval(() => fetchLive(L).catch(() => {}), 90_000);
   return layerGroup;
 }
