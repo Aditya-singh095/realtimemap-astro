@@ -110,7 +110,11 @@ function restoreShareState() {
   restoringShareState = true;
   if (state.view) {
     const [lat, lng, zoom] = state.view;
-    map.setView([Math.max(-90, Math.min(90, lat)), lng, Math.max(2, Math.min(19, zoom))], { animate: false });
+    map.setView(
+      [Math.max(-90, Math.min(90, lat)), lng],
+      Math.max(2, Math.min(19, zoom)),
+      { animate: false },
+    );
   }
   if (state.tile && state.tile !== currentTileId) setTile(state.tile);
   if (state.layers) {
